@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+   
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Creates 4 equal columns */
+    background-color: lightgray;
+    padding: 10px;
+    text-align: center;
+    gap: 10px; /* Adds spacing between columns */
+}
+
+.table-body {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Creates 4 equal columns */
+    padding: 10px;
+    text-align: left;
+    gap: 10px; /* Adds spacing between columns */
+}
