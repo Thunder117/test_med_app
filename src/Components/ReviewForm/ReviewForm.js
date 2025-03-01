@@ -1,7 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './ReviewForm.css';
+import GiveReviews from '../GiveReviews/GiveReviews';
 
 const ReviewForm = () => {
+    const [showFeedback, setShowFeedback] = useState(false);
+
+    const handleShowFeedbackForm = () => {
+        setShowFeedback(true);
+    }
 
     return(
         <div className='container'>
@@ -20,17 +26,24 @@ const ReviewForm = () => {
                     <p>1</p>
                     <p>Dr. John Doe</p>
                     <p>Cardiology</p>
-                    <button>Click Here</button>
+                    <button className='button-disabled' onClick={handleShowFeedbackForm}>Click Here</button>
+                    <p>Very good doctor, would recommend</p>
                 </div>
                 <div className='table-body'>
                     <p>2</p>
                     <p>Dr. Jane Smith</p>
                     <p>Dermatology</p>
-                    <button>Click Here</button>
+                    <button onClick={handleShowFeedbackForm}>Click Here</button>
                 </div>
             </div>
+            <div>
+                {showFeedback && <GiveReviews/>}
+            </div>
         </div>
+        
     );
 }
+
+
 
 export default ReviewForm;

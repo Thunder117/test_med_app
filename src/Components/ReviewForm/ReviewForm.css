@@ -5,10 +5,6 @@
     align-items: center;
 }
 
-.title {
-   
-}
-
 .table-header {
     display: grid;
     grid-template-columns: repeat(5, 1fr); /* Creates 4 equal columns */
@@ -24,4 +20,8 @@
     padding: 10px;
     text-align: left;
     gap: 10px; /* Adds spacing between columns */
+}
+
+.button-disabled {
+    background-color: lightgray;
 }
