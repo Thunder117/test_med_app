@@ -100,16 +100,6 @@ const DoctorCardIC = ({ name, speciality, experience, ratings, profilePic }) => 
           )}
         </Popup>
       </div>
-
-      {/* Show the notification when appointment is canceled */}
-      {notificationVisible && (
-        <div className="notification-container">
-          <div className="notification-card">
-            <h3>Appointment Canceled!</h3>
-            <p>Your appointment has been successfully canceled.</p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
