@@ -1,0 +1,44 @@
+/* Notification container to make sure it is positioned correctly */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    width: 300px;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  /* Notification card styles */
+  .notification-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    color: #333;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+  }
+  
+  /* Title style */
+  .notification-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #007bff;
+  }
+  
+  /* Add some space between the information paragraphs */
+  .notification-card p {
+    margin: 5px 0;
+  }
+  
+  /* Animation to fade in the notification */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
