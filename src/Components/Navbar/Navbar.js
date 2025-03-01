@@ -12,13 +12,14 @@ const Navbar = () => {
   const handleClick = () => setClick(!click);
 
   const handleLogout = () => {
+    // Clear session and local storage
     sessionStorage.removeItem("auth-token");
     sessionStorage.removeItem("name");
     sessionStorage.removeItem("email");
     sessionStorage.removeItem("phone");
     localStorage.removeItem("doctorData");
 
-    // Remove the reviewFormData from local storage
+    // Remove review form data
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key.startsWith("reviewFormData_")) {
@@ -26,9 +27,10 @@ const Navbar = () => {
       }
     }
 
+    // Reset states and ensure UI reflects logout immediately
     setIsLoggedIn(false);
+    setUsername('');
     setEmail('');
-    window.location.reload();
   };
 
   const handleDropdown = () => {
@@ -36,8 +38,11 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    // Check session storage for login details on initial load
     const storedEmail = sessionStorage.getItem("email");
     const storedName = sessionStorage.getItem("name");
+
+    console.log("Session Storage - Email:", storedEmail, "Name:", storedName);
 
     if (storedEmail && storedName) {
       setIsLoggedIn(true);
