@@ -1,8 +1,8 @@
-/* Notification container to make sure it is positioned correctly */
+/* Notification container to position it at the bottom-left of the screen */
 .notification-container {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    bottom: 20px;
+    left: 20px;
     z-index: 9999;
     width: 300px;
     animation: fadeIn 0.5s ease-out;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar/Navbar';
+import ReactDOM from 'react-dom';
 
 // Function component Notification to display user notifications
 const Notification = ({ children }) => {
@@ -35,7 +36,6 @@ const Notification = ({ children }) => {
     }
   }, []); // Empty dependency array ensures useEffect runs only once after initial render
 
-  // Return JSX elements to display Navbar, children components, and appointment details if user is logged in
   return (
     <div>
       {/* Render Navbar component */}
@@ -43,18 +43,21 @@ const Notification = ({ children }) => {
       {/* Render children components */}
       {children}
 
-      {/* Display notification if user is logged in, appointmentData is available, and notificationVisible is true */}
-      {isLoggedIn && appointmentData && notificationVisible && (
-        <div className="notification-container">
-          <div className="notification-card">
-            <h3 className="notification-title">Appointment Details</h3>
-            <p><strong>Username:</strong> {username}</p>
-            <p><strong>Doctor:</strong> {doctorData?.name}</p>
-            <p><strong>Appointment Date:</strong> {appointmentData?.date}</p>
-            <p><strong>Appointment Time:</strong> {appointmentData?.time}</p>
-          </div>
-        </div>
-      )}
+      {/* Render notification with additional details */}
+      {isLoggedIn && appointmentData && 
+        ReactDOM.createPortal(
+          <div className="notification-container">
+            <div className="notification-card">
+              <h3 className="notification-title">Appointment Details</h3>
+              <p><strong>Booked By:</strong> {username}</p> {/* Display username who booked the appointment */}
+              <p><strong>Doctor:</strong> {doctorData?.name}</p> {/* Display doctor's name */}
+              <p><strong>Appointment Date:</strong> {appointmentData?.date}</p> {/* Display appointment date */}
+              <p><strong>Appointment Time:</strong> {appointmentData?.time}</p> {/* Display appointment time */}
+            </div>
+          </div>, 
+          document.body // This will append it directly to the body element, outside the normal component hierarchy
+        )
+      }
     </div>
   );
 };
