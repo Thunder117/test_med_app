@@ -1,128 +1,138 @@
 import React, { useState } from 'react';
-import "./Sign_Up.css";
+import './Sign_Up.css';
+import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config';
 
-function Sign_Up() {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    password: ''
-  });
-  
-  const [errors, setErrors] = useState({});
+// Function component for Sign Up form
+const Sign_Up = () => {
+    // State variables using useState hook
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const [showerr, setShowerr] = useState(''); // State to show error messages
+    const navigate = useNavigate(); // Navigation hook from react-router
 
-  const validateForm = () => {
-    let formErrors = {};
-    const phoneRegex = /^[0-9]{10}$/;  // Simple phone number validation (10 digits)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  // Basic email validation
+    // Function to handle form submission
+    const register = async (e) => {
+        e.preventDefault(); // Prevent default form submission
 
-    // Check Name
-    if (!formData.name) formErrors.name = "Name is required";
-    
-    // Check Phone
-    if (!formData.phone) formErrors.phone = "Phone is required";
-    else if (!phoneRegex.test(formData.phone)) formErrors.phone = "Invalid phone number";
+        // API Call to register user
+        const response = await fetch(`${API_URL}/api/auth/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                password: password,
+                phone: phone,
+            }),
+        });
 
-    // Check Email
-    if (!formData.email) formErrors.email = "Email is required";
-    else if (!emailRegex.test(formData.email)) formErrors.email = "Invalid email format";
-    
-    // Check Password
-    if (!formData.password) formErrors.password = "Password is required";
-    else if (formData.password.length < 6) formErrors.password = "Password must be at least 6 characters";
+        const json = await response.json(); // Parse the response JSON
 
-    setErrors(formErrors);
-    return Object.keys(formErrors).length === 0;  // Return true if no errors
-  };
+        if (json.authtoken) {
+            // Store user data in session storage
+            sessionStorage.setItem("auth-token", json.authtoken);
+            sessionStorage.setItem("name", name);
+            sessionStorage.setItem("phone", phone);
+            sessionStorage.setItem("email", email);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log("Form submitted successfully!");
-      // Proceed with form submission logic (e.g., API call)
-    }
-  };
+            // Redirect user to home page
+            navigate("/");
+            window.location.reload(); // Refresh the page
+        } else {
+            if (json.errors) {
+                for (const error of json.errors) {
+                    setShowerr(error.msg); // Show error messages
+                }
+            } else {
+                setShowerr(json.error);
+            }
+        }
+    };
 
-  return (
-    <div className="container" style={{ marginTop: '5%' }}>
-      <div className="signup-grid">
-        <div className="signup-text">
-          <h1>Sign Up</h1>
+    // JSX to render the Sign Up form
+    return (
+        <div className="container" style={{ marginTop: '5%' }}>
+            <div className="signup-grid">
+                <div className="signup-form">
+                    <form method="POST" onSubmit={register}>
+                        {/* Name field */}
+                        <div className="form-group">
+                            <label htmlFor="name">Name</label>
+                            <input
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                type="text"
+                                name="name"
+                                id="name"
+                                className="form-control"
+                                placeholder="Enter your name"
+                                aria-describedby="helpId"
+                            />
+                        </div>
+
+                        {/* Email field */}
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                type="email"
+                                name="email"
+                                id="email"
+                                className="form-control"
+                                placeholder="Enter your email"
+                                aria-describedby="helpId"
+                            />
+                        </div>
+
+                        {/* Phone field */}
+                        <div className="form-group">
+                            <label htmlFor="phone">Phone</label>
+                            <input
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                type="tel"
+                                name="phone"
+                                id="phone"
+                                className="form-control"
+                                placeholder="Enter your phone number"
+                                aria-describedby="helpId"
+                            />
+                        </div>
+
+                        {/* Password field */}
+                        <div className="form-group">
+                            <label htmlFor="password">Password</label>
+                            <input
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                type="password"
+                                name="password"
+                                id="password"
+                                className="form-control"
+                                placeholder="Enter your password"
+                                aria-describedby="helpId"
+                            />
+                        </div>
+
+                        {/* Display error message if there's any */}
+                        {showerr && <div className="err" style={{ color: 'red' }}>{showerr}</div>}
+
+                        {/* Submit button */}
+                        <div className="btn-group">
+                            <button type="submit" className="btn btn-primary mb-2 mr-1 waves-effect waves-light">Submit</button>
+                            <button type="reset" className="btn btn-danger mb-2 waves-effect waves-light">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div className="signup-text1" style={{ textAlign: 'left' }}>
-          Already a member? <span><a href="../Login/Login.html" style={{ color: '#2190FF' }}> Login</a></span>
-        </div>
-        <div className="signup-form">
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-                className="form-control"
-                placeholder="Enter your name"
-              />
-              {errors.name && <p className="error">{errors.name}</p>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="phone">Phone</label>
-              <input
-                type="tel"
-                name="phone"
-                id="phone"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                required
-                className="form-control"
-                placeholder="Enter your phone number"
-              />
-              {errors.phone && <p className="error">{errors.phone}</p>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-                className="form-control"
-                placeholder="Enter your email"
-              />
-              {errors.email && <p className="error">{errors.email}</p>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                required
-                className="form-control"
-                placeholder="Enter your password"
-              />
-              {errors.password && <p className="error">{errors.password}</p>}
-            </div>
-
-            <div className="btn-group">
-              <button type="submit" className="btn btn-primary mb-2 mr-1 waves-effect waves-light">Submit</button>
-              <button type="reset" className="btn btn-danger mb-2 waves-effect waves-light">Reset</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
 
-export default Sign_Up;
+export default Sign_Up; // Export the Sign_Up component for use in other components
