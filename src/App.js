@@ -12,6 +12,7 @@ import Login from './Components/Login/Login';
 import InstantConsultation from './Components/InstantConsultationBooking/InstantConsultation';
 import Notification from './Components/Notification/Notification';
 import ReviewForm from './Components/ReviewForm/ReviewForm';
+import ProfileForm from './Components/ProfileCard/ProfileCard';
 
 // Function component for the main App
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/ReviewForm" element={<ReviewForm />} />
             <Route path="/Sign_Up" element={<Sign_Up />} />
             <Route path="/Login" element={<Login />} />
+            <Route path="/ProfileForm" element={<ProfileForm />} />
             <Route path="/instant-consultation" element={<InstantConsultation />} />
             {/* Add other routes as necessary */}
           </Routes>
